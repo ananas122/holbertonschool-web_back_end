@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
-'''
-4. Take the code from wait_n and alter it into a new function task_wait_n.
-The code is nearly identical to wait_n except
-task_wait_random is being called.
-'''
+"""async and await syntax"""
 import asyncio
 from typing import List
+
+
 task_wait_random = __import__('3-tasks').task_wait_random
 
 
 async def task_wait_n(n: int, max_delay: int) -> List[float]:
-    ''' Execute n tasks of task_wait_random and return their results '''
-    tasks = [task_wait_random(max_delay) for _ in range(n)]
-    delay = await asyncio.gather(*tasks)
-    return delay
+    "Define the task_wait_n function with prm n and max_delay
+    # Create an empty list to store the delays
+    delays = []
+    # Loop n times to create and await each task
+    for _ in range(n):
+        # Create a task using task_wait_random with max_delay
+        task = task_wait_random(max_delay)
+        # Await the task and append the delays list
+        delays.append(await task)
+    return sorted(delays)
