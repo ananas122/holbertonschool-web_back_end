@@ -10,7 +10,7 @@ async_comprehension = __import__('1-async_comprehension').async_comprehension
 async def measure_runtime() -> float:
     "async gather 4 fois"
     start_time = time.time()
-    # Créez une liste pour stocker les futures des exécutions async_comprehension
+    # Créez une liste pour stocker les futures des exécutions
     tasks = [async_comprehension() for _ in range(4)]
     # Exécutez les coroutines
     results = await asyncio.gather(*tasks)
