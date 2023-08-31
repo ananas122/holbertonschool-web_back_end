@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-"""type-annotated func sum_list which takes a list 
-    input_list of floats
-"""
+"""type-annotated func sum_list"""
+
 from typing import List
 
 
