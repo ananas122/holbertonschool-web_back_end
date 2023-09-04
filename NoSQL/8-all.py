@@ -3,5 +3,4 @@
 import pymongo
 
 def list_all(mongo_collection):
-    documents = mongo_collection.find()
-    return documents
+    return list(mongo_collection.find())
