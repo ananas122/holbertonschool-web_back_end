@@ -37,13 +37,13 @@ class Server:
         "Function hypermedia pagination"
         # Call get_page method to retrieve the dataset page
         data = self.get_page(page, page_size)
-        # Calculer total page : la longueur totale du dataset/la taille de la page
+        # Calcule total page : la longueur totale du dataset/la taille de la page
         total_pages = math.ceil(len(self.dataset()) / page_size)
 
         next_page = page + 1 if page < total_pages else None
         prev_page = page - 1 if page > 1 else None
 
-        hyper = {
+        data = {
             "page_size": len(data),
             "page": page,
             "data": data,
@@ -52,7 +52,7 @@ class Server:
             "total_pages": total_pages
         }
 
-        return hyper
+        return data
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
     "return index range"
