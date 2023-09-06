@@ -12,7 +12,6 @@ class Server:
 
     def __init__(self):
         self.__dataset = None
-        self._data = []  # Initialisez _data avec une liste vide
 
     def dataset(self) -> List[List]:
         """Cached dataset
@@ -26,7 +25,7 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        "Verify if page and page size are int posits"
+        "Verify if page and page size are int positivs"
         assert type(page) == int and type(page_size) == int
         assert page > 0 and page_size > 0
 
@@ -35,16 +34,16 @@ class Server:
         return self.dataset()[start_index:end_index]
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
+        "Function hypermedia pagination"
         # Call get_page method to retrieve the dataset page
-        assert isinstance(page, int) and page > 0, "page must be a positive integer"
-        assert isinstance(page_size, int) and page_size > 0, "page_size must be a positive integer"
-
         data = self.get_page(page, page_size)
+        # Calculer total page : la longueur totale du dataset/la taille de la page
         total_pages = math.ceil(len(self.dataset()) / page_size)
+
         next_page = page + 1 if page < total_pages else None
         prev_page = page - 1 if page > 1 else None
 
-        return  {
+        hyper = {
             "page_size": len(data),
             "page": page,
             "data": data,
@@ -52,6 +51,8 @@ class Server:
             "prev_page": prev_page,
             "total_pages": total_pages
         }
+
+        return hyper
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
     "return index range"
