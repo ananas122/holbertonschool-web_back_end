@@ -66,7 +66,8 @@ class Server:
         # Retourne un dict contenant les info de pagination
         return {
             "index": current_index,
-            "next_index": next_index if next_index < len(indexed_data) else None,
+            "next_index":
+                next_index if next_index < len(indexed_data) else None,
             "page_size": page_size,
             "data": data
         }
