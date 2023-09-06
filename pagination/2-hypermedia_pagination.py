@@ -36,6 +36,7 @@ class Server:
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
         # Call get_page method to retrieve the dataset page
+        dataset_items = len(self.dataset())
         data = self.get_page(page, page_size)
 
         # Calculate the number of pages based on the total rows and page size
