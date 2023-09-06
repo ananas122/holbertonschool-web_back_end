@@ -42,7 +42,7 @@ class Server:
         total_pages = math.ceil((len(self._data) - 1) / page_size)
 
         # Create the hyper dictionary
-        return  {
+        data  {
             "page_size": len(data),
             "page": page,
             "data": data,
@@ -51,7 +51,7 @@ class Server:
             "total_pages": total_pages,
         }
 
-
+        return data
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
     "return index range"
