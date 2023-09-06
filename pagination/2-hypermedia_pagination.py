@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """task 0"""
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 import csv
 import math
 
@@ -34,7 +34,7 @@ class Server:
         start_index, end_index = index_range(page, page_size)
         return self.dataset()[start_index:end_index]
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
         # Call get_page method to retrieve the dataset page
         assert isinstance(page, int) and page > 0, "page must be a positive integer"
         assert isinstance(page_size, int) and page_size > 0, "page_size must be a positive integer"
