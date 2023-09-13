@@ -1,3 +1,4 @@
+/* convert your object to a string. */
 export default class Airport {
   constructor(name, code) {
     this._name = name;
@@ -5,6 +6,6 @@ export default class Airport {
   }
 
   toString() {
-    return `[${this._code}] ${this._name}`;
+    return `[object ${this._code}]`;
   }
 }
