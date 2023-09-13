@@ -3,7 +3,7 @@ import Building from './5-building';
 export default class SkyHighBuilding extends Building {
   constructor(sqft, floors) {
     super(sqft); // Call the constructor of the parent class
-    this._floors = floors; // Assign the value of floors to the _floors attribute
+    this._floors = floors;
   }
 
   // getter and setter floor
