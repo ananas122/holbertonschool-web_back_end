@@ -18,11 +18,10 @@ export default function handleProfileSignup(firstName, lastName, fileName) {
     signUpUser(firstName, lastName),
     uploadPhoto(fileName),
   ])
-    .then((results) =>
-      results.map((result) => {
-        if (result.status === 'fulfilled') {
-          return { status: result.status, value: result.value };
-        }
-        return { status: result.status, value: `${result.reason.name}: ${result.reason.message}` };
-      }));
+    .then((results) => results.map((result) => {
+      if (result.status === 'fulfilled') {
+        return { status: result.status, value: result.value };
+      }
+      return { status: result.status, value: `${result.reason.name}: ${result.reason.message}` };
+    }));
 }
