@@ -10,8 +10,10 @@ export default function handleProfileSignup() {
     .catch((error) => {
       if (error instanceof Error) {
         console.error('Signup system offline', error.message);
+        throw error; // Renvoie l'erreur pour que la promesse soit rejetée
       } else {
         console.error('Signup system offline', error);
+        throw new Error('Une erreur inattendue est survenue.');
       }
     });
 }
