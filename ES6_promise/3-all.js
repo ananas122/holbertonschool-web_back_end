@@ -1,7 +1,7 @@
 /* Handles the signup process for a user profile by uploading a photo and creating a user */
 import { uploadPhoto, createUser } from './utils';
 
-export default function handleProfileSignup () {
+export default function handleProfileSignup() {
   return Promise.all([uploadPhoto(), createUser()])
     // destructuration qui extrait les results des promesses ds le tableau
     .then(([uploadPhotoResult, createUserResult]) => {
