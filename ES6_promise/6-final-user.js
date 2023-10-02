@@ -8,14 +8,14 @@
 import signUpUser from './4-user-promise';
 import uploadPhoto from './5-photo-reject';
 
-export default function handleProfileSignup (firstName, lastName, fileName) {
+export default function handleProfileSignup(firstName, lastName, fileName) {
   // Appels des 2 fonctions et attente de leur résolution ou rejet
   return Promise.all([
     signUpUser(firstName, lastName),
-    uploadPhoto(fileName)
+    uploadPhoto(fileName),
   ])
     // map: result converti en 1 objet qui a 2 proprietes: stauts et value
-    .then((results) => results.map((value) => ({ status: 'resolved', value })))
+    .then((results) => results.map((value) => ({ status: 'fulfilled', value })))
     .catch((errors) => {
     // Vérifie si les erreurs st sous forme de tableau
       if (Array.isArray(errors)) {
