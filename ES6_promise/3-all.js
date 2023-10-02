@@ -8,6 +8,10 @@ export default function handleProfileSignup() {
       console.log(`${uploadPhotoResult.body} ${createUserResult.firstName} ${createUserResult.lastName}`);
     })
     .catch((error) => {
-      console.error('Signup system offline', error);
+      if (error instanceof Error) {
+        console.error('Signup system offline', error.message);
+      } else {
+        console.error('Signup system offline', error);
+      }
     });
 }
