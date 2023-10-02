@@ -1,27 +1,28 @@
 /**
- * Handles the signup process for a user profile by signing up the user and uploading a photo.
+ * Handles the signup process for a user's profile.
+ * Calls the signUpUser and uploadPhoto functions concurrently using Promise.allSettled.
+ * Returns an array of objects containing the status and value of each promise result.
+ *
  * @param {string} firstName - The first name of the user.
  * @param {string} lastName - The last name of the user.
- * @param {string} fileName - The name of the photo file to upload.
- * @returns {Promise} A promise that resolves to an [objet] representing the status and value.
+ * @param {string} fileName - The name of the file to upload.
+ * @returns {Promise<Array>} - A promise that resolves to [objet] of with status, value properties.
+ *                            If the promise is fulfilled, the value will be the resolved value.
+ *                            If the promise is rejected, the value will be an error message.
  */
 import signUpUser from './4-user-promise';
 import uploadPhoto from './5-photo-reject';
 
 export default function handleProfileSignup(firstName, lastName, fileName) {
-  // Appels des 2 fonctions et attente de leur résolution ou rejet
-  return Promise.all([
+  return Promise.allSettled([
     signUpUser(firstName, lastName),
     uploadPhoto(fileName),
   ])
-    // map: result converti en 1 objet qui a 2 proprietes: stauts et value
-    .then((results) => results.map((value) => ({ status: 'fulfilled', value })))
-    .catch((errors) => {
-    // Vérifie si les erreurs st sous forme de tableau
-      if (Array.isArray(errors)) {
-        return errors.map((value) => ({ status: 'rejected', value }));
-      }
-      // Si ce n'est pas un tableau, retournez une structure d'erreur
-      return [{ status: 'rejected', value: errors }];
-    });
+    .then((results) =>
+      results.map((result) => {
+        if (result.status === 'fulfilled') {
+          return { status: result.status, value: result.value };
+        }
+        return { status: result.status, value: `${result.reason.name}: ${result.reason.message}` };
+      }));
 }
