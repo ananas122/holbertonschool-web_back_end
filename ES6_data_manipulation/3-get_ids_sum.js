@@ -4,6 +4,6 @@
  * @returns {number} - The sum of student IDs.
  */
 
-export default function getStudentIdsSum (students) {
+export default function getStudentIdsSum(students) {
   return students.reduce((acc, val) => acc + val.id, 0);
 }
