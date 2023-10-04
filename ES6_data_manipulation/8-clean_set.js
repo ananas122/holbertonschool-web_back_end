@@ -7,10 +7,12 @@
 * @returns {string} The filtered set values joined by dashes.
 */
 export default function cleanSet(set, prefix) {
-  if (!prefix) { return ''; }
+  if (!prefix) {
+    return '';
+  }
 
   return Array.from(set)
-    .filter(value => value.startsWith(prefix))
-    .map(value => value.slice(prefix.length))
+    .filter((value) => value.startsWith(prefix))
+    .map((value) => value.slice(prefix.length))
     .join('-');
 }
