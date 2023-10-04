@@ -7,7 +7,7 @@
 * @returns {string} The filtered set values joined by dashes.
 */
 export default function cleanSet(set, prefix) {
-  if (!prefix || !set || typeof set !== 'object') { return ''; }
+  if (!prefix) { return ''; }
 
   return Array.from(set)
     .filter(value => value.startsWith(prefix))
