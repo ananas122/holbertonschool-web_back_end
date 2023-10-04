@@ -1,12 +1,8 @@
-function cleanSet(set, startString) {
-  if (!startString) {
-    return '';
-  }
+export default function cleanset(set, startString) {
+  if (!startString || !set || typeof set !== 'object') { return ''; }
 
-  return [...set]
+  return Array.from(set)
     .filter((value) => value.startsWith(startString))
     .map((value) => value.slice(startString.length))
     .join('-');
 }
-
-export default cleanSet;
