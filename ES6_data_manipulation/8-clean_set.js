@@ -6,7 +6,7 @@
 * @param {string} startString The prefix to filter values by.
 * @returns {string} The filtered set values joined by dashes.
 */
-export default function cleanSet(set, startString) {
+function cleanSet(set, startString) {
   if (!startString) {
     return '';
   }
@@ -16,3 +16,5 @@ export default function cleanSet(set, startString) {
     .map((value) => value.slice(startString.length))
     .join('-');
 }
+
+export default cleanSet;
