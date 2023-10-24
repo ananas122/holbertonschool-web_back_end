@@ -19,7 +19,7 @@ class Server:
         if self.__dataset is None:
             with open(self.DATA_FILE) as f:
                 reader = csv.reader(f)
-                dataset = [row for row in reader]
+                dataset = list(reader)
             self.__dataset = dataset[1:]
 
         return self.__dataset
@@ -43,17 +43,14 @@ class Server:
         next_page = page + 1 if page < total_pages else None
         prev_page = page - 1 if page > 1 else None
 
-        # Création d'un dict avec les infos de pagination
-        hyper = {
+        return {
             "page_size": len(data),
             "page": page,
             "data": data,
             "next_page": next_page,
             "prev_page": prev_page,
-            "total_pages": total_pages
+            "total_pages": total_pages,
         }
-
-        return hyper
 
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
