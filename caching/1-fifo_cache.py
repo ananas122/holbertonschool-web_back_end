@@ -11,8 +11,10 @@ class FIFOCache(BaseCaching):
 
     def __init__(self):
         """ Initialize """
-        super().__init__() # Call the parent class constructor
-        self.keys = []  # List to keep track of the order of items
+        # Call the parent class constructor
+        super().__init__()
+        # List to keep track of the order of items
+        self.keys = []
 
     def put(self, key, item):
         """ Add an item in the cache """
