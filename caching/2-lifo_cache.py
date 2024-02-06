@@ -19,7 +19,6 @@ class LIFOCache(BaseCaching):
         # Create a list to keep track of the order of items.
         self.keys = []
 
-    
     def put(self, key, item):
         """ Add an item in the cache """
         if key is not None and item is not None:
@@ -39,4 +38,3 @@ class LIFOCache(BaseCaching):
         if key is None or key not in self.cache_data:
             return None
         return self.cache_data.get(key)
-
