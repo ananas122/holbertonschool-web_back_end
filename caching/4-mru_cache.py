@@ -13,7 +13,7 @@ class MRUCache(BaseCaching):
         """ Initialize the LRU cache """
         super().__init__()
         # Create a list to keep track of the order of keys
-        self.lru_order = []
+        self.mru_order = []
 
     def put(self, key, item):
         """ Add an item to the cache """
@@ -22,7 +22,7 @@ class MRUCache(BaseCaching):
 
         if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
             # Retrieve the MRU (Most Recently Used) key
-            mru_key = self.lru_order.pop()
+            mru_key = self.mru_order.pop()
             # Delete the MRU item from the cache
             del self.cache_data[mru_key]
             print("DISCARD:", mru_key)
@@ -37,7 +37,7 @@ class MRUCache(BaseCaching):
             return None
 
         # Move the accessed key to the end of the LRU order
-        self.lru_order.remove(key)
-        self.lru_order.append(key)
+        self.mru_order.remove(key)
+        self.mru_order.append(key)
 
         return self.cache_data[key]
