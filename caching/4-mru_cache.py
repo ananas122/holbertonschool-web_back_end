@@ -23,7 +23,7 @@ class MRUCache(BaseCaching):
         if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
             # Retrieve the MRU (Most Recently Used) key
             mru_key = self.mru_order.pop()
-            # Delete the MRU item from the cache
+            # Delete the MRU item from the cache.
             del self.cache_data[mru_key]
             print("DISCARD:", mru_key)
 
