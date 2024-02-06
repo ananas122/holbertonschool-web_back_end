@@ -1,36 +1,42 @@
-#!/usr/bin/python3
-""" LIFOCache module
-"""
+#!/usr/bin/env python3
+""" LIFOCache module """
+# Import the base caching class BaseCaching
 from base_caching import BaseCaching
+
+# Define a new class LIFOCache that inherits from BaseCaching
 
 
 class LIFOCache(BaseCaching):
     """
-    LIFOCache defines a caching system using the LIFO algorithm.
+    LIFOCache defines a caching system using the LIFO algorithm
     """
 
+    # The constructor of the class
     def __init__(self):
         """ Initialize """
+        # Call the parent class constructor
         super().__init__()
-        self.last_key_added = None  # Track the last key added
+        # Create a list to keep track of the order of items.
+        self.keys = []
 
+    
     def put(self, key, item):
-        """
-        Add or update an item in the cache.
-        Discards the last item added if the cache exceeds its limit (LIFO algorithm).
-        """
-        if key is None or item is None:
-            return
+        """ Add an item in the cache """
+        if key is not None and item is not None:
+            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
+                if key not in self.cache_data:
+                    # Remove the last item from the cache (LIFO)
+                    del self.cache_data[self.keys[-1]]
+                    print("DISCARD:", self.keys[-1])
+                    self.keys.pop(-1)
+            # Add the item to the cache and to the keys list
+            self.cache_data[key] = item
+            self.keys.append(key)
 
-        self.cache_data[key] = item
-        self.last_key_added = key  # Update the last key added
-
-        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            if self.last_key_added:
-                print("DISCARD: {}".format(self.last_key_added))
-                del self.cache_data[self.last_key_added]
-                self.last_key_added = None  # Reset last_key_added
-
+    # Method to get an item by key
     def get(self, key):
         """ Get an item by key """
-        return self.cache_data.get(key, None)
+        if key is None or key not in self.cache_data:
+            return None
+        return self.cache_data.get(key)
+
