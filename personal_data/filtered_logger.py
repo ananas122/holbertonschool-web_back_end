@@ -4,6 +4,7 @@ Main file
 """
 
 import re
+from typing import List
 
 
 def filter_datum(fields, redaction, message, separator) -> str:
