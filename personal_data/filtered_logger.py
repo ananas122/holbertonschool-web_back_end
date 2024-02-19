@@ -49,3 +49,22 @@ class RedactingFormatter(logging.Formatter):
         return super().format(record)
 
 
+"""Task 2 - Create logger """
+
+
+def get_logger() -> logging.Logger:
+    """ Returns a logging object """
+    # Création de l'objet Logger
+    logger = logging.getLogger('user_data')
+    #Journalise les msg ayant un niveau INFO
+    logger.setLevel(logging.INFO)
+    # msg du logger non transmis au loggers parents
+    logger.propagate = False
+    
+    stream = logging.StreamHandler()
+    stream.setFormatter(RedactingFormatter(fields=PII_FIELDS))
+    logger.addHandler(stream)
+
+    return logger
+
+
