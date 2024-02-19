@@ -2,6 +2,7 @@
 """
 0. Regex-ing
 """
+import re
 
 from typing import List
 
