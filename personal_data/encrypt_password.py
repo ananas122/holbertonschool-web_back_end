@@ -3,7 +3,6 @@
 Task 5. Encrypting passwords
 """
 
-#!/usr/bin/env python3
 import bcrypt
 
 
