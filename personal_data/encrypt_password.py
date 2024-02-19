@@ -7,7 +7,7 @@ Task 5. Encrypting passwords
 import bcrypt
 
 
-def hash_password(password):
+def hash_password(password: str) -> bytes:
     """Generate a secure hash of the given password."""
     # Convertir le mot de passe en tableau de bytes
     password_bytes = password.encode('utf-8')
