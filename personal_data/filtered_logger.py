@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
+"""
+0. Regex-ing
+"""
+
 import re
-    """
-    Regex 
-    """
+from typing import List
+
 
 def filter_datum(fields, redaction, message, separator) -> str:
     """
-    returns the log message obfuscated
+    Obfuscate sensitive information in a log message.
     """
-    return re.sub('|'.join(fields), redaction, message)
+    pattern = "|".join(fields)
+    regex = f"({pattern})=(.*?){separator}"
+    return re.sub(regex, f"\\1={redaction}{separator}", message)
