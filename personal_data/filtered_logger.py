@@ -9,6 +9,7 @@
 import re
 import logging
 from typing import List
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 """ Task O: """
@@ -27,14 +28,11 @@ def filter_datum(fields: List[str], redaction: str,
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
-        """
+    """ Redacting Formatter class """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
-
-    class RedactingFormatter(logging.Formatter):
 
     def __init__(self, fields: List[str]):
         self.fields = fields
@@ -49,22 +47,22 @@ class RedactingFormatter(logging.Formatter):
         return super().format(record)
 
 
-"""Task 2 - Create logger """
-
+'''Task 2 - Create logger '''
 
 def get_logger() -> logging.Logger:
     """ Returns a logging object """
     # Création de l'objet Logger
     logger = logging.getLogger('user_data')
-    #Journalise les msg ayant un niveau INFO
+    # Journalise les msg ayant un niveau INFO
     logger.setLevel(logging.INFO)
-    # msg du logger non transmis au loggers parents
+    # msg du logger non transmis aux loggers parents
     logger.propagate = False
-    
-    stream = logging.StreamHandler()
-    stream.setFormatter(RedactingFormatter(fields=PII_FIELDS))
-    logger.addHandler(stream)
+    # Création d'un gestionnaire de flux pour les msg vers la sortie
+    handler = logging.StreamHandler()
+    # Défir un formateur de message pour masquer les champs sensibles
+    formatter = RedactingFormatter(["email", "password"])
+    handler.setFormatter(formatter)
+    # Ajout du gestionnaire de flux au logger
+    logger.addHandler(handler)
 
     return logger
-
-
