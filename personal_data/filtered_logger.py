@@ -34,15 +34,18 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: list):
-        """ Constructor accepting a list of fields """
-        super().__init__(self.FORMAT)
+    class RedactingFormatter(logging.Formatter):
+
+    def __init__(self, fields: List[str]):
         self.fields = fields
+        super().__init__(self.FORMAT)
 
     def format(self, record: logging.LogRecord) -> str:
         """ Format method to filter sensitive values """
+        # Filtrer les valeurs sensibles dans le message de journal
         record.msg = filter_datum(
             self.fields, self.REDACTION, record.msg, self.SEPARATOR)
+        # Appel de la méthode de formatage de la classe parent pr compléter le formatage
         return super().format(record)
 
 
