@@ -24,11 +24,17 @@ class Auth:
         # Authentication is required for the given path
         return True
 
-
     def authorization_header(self, request=None) -> str:
+        """Retrieve the Authorization header from the Flask request.
+
+        Args:
+        request: The Flask request.
+
+        Returns:
+            str: The Authorization header from the request if present, 
+            None otherwise.
+        """
         if not request:
             return None
         return request.headers.get('Authorization')
 
-    def current_user(self, request=None) -> TypeVar('User'):
-        return None
