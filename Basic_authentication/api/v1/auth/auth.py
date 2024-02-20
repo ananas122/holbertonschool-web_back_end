@@ -15,13 +15,11 @@ class Auth:
         if path is None or not excluded_paths:
             return True
 
-        # Iterate through the excluded paths
         for excluded_path in excluded_paths:
-            # Check if the path is equal to an excluded path or if it starts with an excluded path
-            if path == excluded_path or path.startswith(excluded_path):
+            # Make the comparison "slash tolerant" by ensuring both paths end with a/
+            if path.rstrip("/") == excluded_path.rstrip("/"):
                 return False
 
-        # Authentication is required for the given path
         return True
 
     def authorization_header(self, request=None) -> str:
