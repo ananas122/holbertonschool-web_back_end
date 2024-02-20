@@ -16,7 +16,7 @@ class Auth:
             return True
 
         for excluded_path in excluded_paths:
-            # Make the comparison "slash tolerant" by ensuring both paths end with a/
+            # Make the comparison "/tolerant" by ensuring both paths end"/"
             if path.rstrip("/") == excluded_path.rstrip("/"):
                 return False
 
@@ -29,10 +29,8 @@ class Auth:
         request: The Flask request.
 
         Returns:
-            str: The Authorization header from the request if present, 
-            None otherwise.
+        str: The Authorization header from the request if present
         """
         if not request:
             return None
         return request.headers.get('Authorization')
-
