@@ -26,13 +26,6 @@ def stats() -> str:
     return jsonify(stats)
 
 
-@app.errorhandler(404)
-def not_found(error) -> str:
-    """ Not found handler
-    """
-    return jsonify({"error": "Not found"}), 404
-
-
 @app_views.route('/unauthorized')
 def unauthorized() -> str:
     """ GET /api/v1/unauthorized
@@ -40,5 +33,4 @@ def unauthorized() -> str:
       - 401 error
     """
     abort(401)
-
 
