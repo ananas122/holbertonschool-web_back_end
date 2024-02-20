@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 """ Module of Index views
 """
-#!/usr/bin/env python3
-""" Module of Index views
-"""
-
-
-
-
 from flask import jsonify, abort
 from api.v1.views import app_views
+
+
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status() -> str:
     """ GET /api/v1/status
@@ -31,17 +26,15 @@ def stats() -> str:
     return jsonify(stats)
 
 
-@app.errorhandler(404)
-def not_found(error) -> str:
-    """ Not found handler
-    """
-    return jsonify({"error": "Not found"}), 404
-
-
-@app_views.route('/unauthorized')
-def unauthorized() -> str:
+@app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
+def unauth():
     """ GET /api/v1/unauthorized
-    Return:
-      - 401 error
     """
-    abort(401)
+    return abort(401)
+
+
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbidden():
+    """ GET /api/v1/forbidden
+    """
+    return abort(403)
