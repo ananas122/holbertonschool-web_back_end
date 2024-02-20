@@ -16,7 +16,7 @@ auth = Auth()
 
 @app.before_request
 def handle_request():
-    # Define excluded paths
+    """Define excluded paths"""
     excluded_paths = ['/api/v1/status/',
                       '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
