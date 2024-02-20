@@ -27,7 +27,7 @@ def stats() -> str:
 
 
 @app_views.route('/unauthorized')
-def unauthorized() -> str:
+def unauth() -> str:
     """ GET /api/v1/unauthorized
     Return:
       - 401 error
