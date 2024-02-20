@@ -26,11 +26,12 @@ class Auth:
         """Retrieve the Authorization header from the Flask request.
 
         Args:
-        request: The Flask request.
+            request: The Flask request.
 
         Returns:
-        str: The Authorization header from the request if present
+        str: The Authorization header from the request if present, 
+        None otherwise.
         """
-        if not request:
+        if request is None or 'Authorization' not in request.headers:
             return None
-        return request.headers.get('Authorization')
+        return request.headers['Authorization']
