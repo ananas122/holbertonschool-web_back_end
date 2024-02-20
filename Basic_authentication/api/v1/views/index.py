@@ -25,13 +25,12 @@ def stats() -> str:
     stats['users'] = User.count()
     return jsonify(stats)
 
-@app_views.route('/')
-def index() -> str:
-    """ GET /
-    Return:
-      - the index
+
+@app.errorhandler(404)
+def not_found(error) -> str:
+    """ Not found handler
     """
-    return 'Welcome to the RESTful API for the ToDo App'
+    return jsonify({"error": "Not found"}), 404
 
 
 @app_views.route('/unauthorized')
