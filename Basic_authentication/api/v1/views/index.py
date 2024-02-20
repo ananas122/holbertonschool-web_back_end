@@ -24,3 +24,29 @@ def stats() -> str:
     stats = {}
     stats['users'] = User.count()
     return jsonify(stats)
+
+@app_views.route('/')
+def index() -> str:
+    """ GET /
+    Return:
+      - the index
+    """
+    return 'Welcome to the RESTful API for the ToDo App'
+
+
+@app_views.route('/unauthorized')
+def unauthorized() -> str:
+    """ GET /api/v1/unauthorized
+    Return:
+      - 401 error
+    """
+    abort(401)
+
+
+@app_views.route('/forbidden')
+def forbidden() -> str:
+    """ GET /api/v1/forbidden
+    Return:
+      - 403 error
+    """
+    abort(403)
