@@ -29,7 +29,7 @@ class Auth:
             request: The Flask request.
 
         Returns:
-        str: The Authorization header from the request if present, 
+        str: The Authorization header from the request if present,
         None otherwise.
         """
         if request is None or 'Authorization' not in request.headers:
