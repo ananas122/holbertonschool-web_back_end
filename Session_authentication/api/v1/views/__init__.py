@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" DocDocDocDocDocDoc
+""" module  for testing the 'py-json' package
 """
 from flask import Blueprint
 
@@ -10,5 +10,4 @@ from api.v1.views.session_auth import *
 from api.v1.views.users import *
 from api.v1.views.index import *
 
-# Assurez-vous que la classe User est correctement définie et accessible
 User.load_from_file()
