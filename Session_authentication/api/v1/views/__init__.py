@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """ 
-module
+module  for testing the class 'Sensor' from module 'sensor.py'.
 """
 from api.v1.views.session_auth import *
 from api.v1.views.users import *
