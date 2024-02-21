@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """ 
-Module of Users views
+Module of Session Authentication views
 """
+
 from api.v1.views import app_views
 from flask import abort, jsonify, request, make_response
 from os import getenv
