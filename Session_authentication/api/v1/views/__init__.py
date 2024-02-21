@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-""" 
-module  for testing the class 'Sensor' from module 'sensor.py'.
+""" Module  for the 'list' command. 
 """
 from api.v1.views.session_auth import *
 from api.v1.views.users import *

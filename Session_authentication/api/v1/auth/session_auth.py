@@ -11,9 +11,9 @@ import uuid
 
 
 class SessionAuth(Auth):
-    '''
+    """
         Session Authentication
-    '''
+    """
     user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
@@ -37,14 +37,14 @@ class SessionAuth(Auth):
         return user_id
 
     def current_user(self, request=None):
-        ''' Returns a User instance based on a cookie value'''
+        """ Returns a User instance based on a cookie value """
         session_cookie = self.session_cookie(request)
         user_id = self.user_id_for_session_id(session_cookie)
 
         return User.get(user_id)
 
     def destroy_session(self, request=None):
-        ''' Delete the user session / logout'''
+        """ Delete the user session / logout"""
         if request is None:
             return False
         session_cookie = self.session_cookie(request)
