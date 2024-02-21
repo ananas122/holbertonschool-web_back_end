@@ -35,3 +35,21 @@ class Auth:
         if request is None or 'Authorization' not in request.headers:
             return None
         return request.headers['Authorization']
+
+
+ def current_user(self, request=None) -> TypeVar('User'):
+        """
+        nyes
+        """
+        return None
+
+    def session_cookie(self, request=None):
+        """
+        Get the session cookie from the request
+        """
+        if request is None:
+            return None
+
+        session_cookie_name = getenv("SESSION_NAME", "_my_session_id")
+
+        return request.cookies.get(session_cookie_name)
