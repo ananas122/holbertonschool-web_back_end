@@ -6,6 +6,7 @@ Base = declarative_base()
 
 
 class User(Base):
+    """User classs  represents a table in the database"""
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
