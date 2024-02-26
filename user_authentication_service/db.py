@@ -56,7 +56,6 @@ class DB:
             # e pr stock l instance de l except capturé ici
             raise NoResultFound(f"Invalid: {e}")
 
-
     def update_user(self, user_id: int, **kwargs) -> None:
         """Update properties of an existing user."""
         # Récup utilisateur avec l'id user_id de la db
