@@ -16,13 +16,13 @@ def home():
 
 
 @app.route("/users", methods=["POST"])
-def users():
+def register_user():
     #recup de email et psw depuis les donnees de formulare
     email = request.form.get('email')
     password = request.form.get('password')
 
     try:
-        # Tentative d'ajout d'un nouvel utilisateur
+        # Tentative d'ajout d'un nouvel user
         user = AUTH.register_user(email, password)
         # succes
         return jsonify({"email": email, "message": "user created"})
@@ -46,15 +46,12 @@ def login() -> str:
             response = jsonify({"email": email, "message": "logged in"})
             response.set_cookie("session_id", session_id)
             return response
-
     abort(401)
 
 
 @ app.route('/sessions', methods=['DELETE'])
 def logout() -> str:
-    '''
-    logout session
-    '''
+    """logout session"""
     session_id = request.cookies.get('session_id')
 
     if not session_id:
@@ -72,5 +69,3 @@ def logout() -> str:
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
