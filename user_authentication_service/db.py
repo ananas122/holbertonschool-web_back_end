@@ -3,7 +3,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.session import Session
 from user import Base, User
 
 
@@ -28,10 +27,10 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         """Adds a new user to the database and returns it."""
         # Create a new User instance with the provided email and hashed password
-        user = User(email=email, hashed_password=hashed_password)
+        new_user = User(email=email, hashed_password=hashed_password)
         # Add the User instance to the current SQLAlchemy session
-        self._session.add(user)
+        self._session.add(new_user)
         # Commit the changes to the database to persist the new user
         self._session.commit()
         # Return the User instance, now with an ID assigned by the database
-        return user
+        return new_user
