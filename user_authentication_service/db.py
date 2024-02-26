@@ -73,5 +73,5 @@ class DB:
             else:
                 # Si l'attribut n'existe pas, lève une exception ValueError
                 raise ValueError
-        # envoye changements à la base de données
+        # envoye changements à db
         self._session.commit()
