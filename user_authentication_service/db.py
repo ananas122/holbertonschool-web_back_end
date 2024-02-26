@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""
-DB module
+"""DB module
 """
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base, User
 
@@ -43,3 +42,16 @@ class DB:
         self._session.commit()
         # Return the User instance, now with an ID assigned by the db
         return user
+
+    def find_user_by(self, **kwargs) -> User:
+        """Find a user in the database by specified criteria."""
+        try:
+            # Effectue une requ ds db pr récupérer le 1er user = critères kwargs
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound(
+                    "Not found")
+            return user
+        except NoResultFound as e:
+            # e pr stock l instance de l except capturé ici
+            raise NoResultFound(f"Invalid: {e}")
