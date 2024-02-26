@@ -59,17 +59,20 @@ class DB:
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """Update properties of an existing user."""
-        try:
-            # Find the user to update using the user_id
-            user = self.find_user_by(id=user_id)
-
-            # Update user's properties with the provided kwargs
-            for key, value in kwargs.items():
+        # Récup utilisateur avec l'id user_id de la db
+        user = self._session.query(User).filter_by(id=user_id).one()
+        # Vérifie si  user n'est trouvé avec l'id spécifié
+        if user is None:
+            # Si  n'est pas trouvé, lève une exception NoResultFound
+            raise NoResultFound
+        # Parcourt chaque argument nommé passé à la méthode
+        for key, value in kwargs.items():
+            # Vérifie si user a un attribut avec nom spécifié dans key
+            if hasattr(user, key):
+                # Si oui, update sa valeur avec celle spécifiée dans value
                 setattr(user, key, value)
-            # Commit the changes to the database
-            self._session.commit()
-            # Return None as specified in the function signature
-            return None
-        except NoResultFound:
-        # If no user is found with the specified user_id, raise a ValueError
-            raise ValueError("No such user.")
+            else:
+                # Si l'attribut n'existe pas, lève une exception ValueError
+                raise ValueError
+        # envoye changements à la base de données
+        self._session.commit()
