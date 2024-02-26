@@ -31,7 +31,7 @@ def register_user():
         return jsonify({"message": "email already registered"}), 400
 
 
-@ app.route('/sessions', methods=['POST'])
+@app.route('/sessions', methods=['POST'])
 def login() -> str:
     """ Sessions Login User """
     try:
@@ -49,7 +49,7 @@ def login() -> str:
     abort(401)
 
 
-@ app.route('/sessions', methods=['DELETE'])
+@app.route('/sessions', methods=['DELETE'])
 def logout() -> str:
     """logout session"""
     session_id = request.cookies.get('session_id')
