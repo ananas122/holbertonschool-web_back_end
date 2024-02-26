@@ -35,7 +35,11 @@ class DB:
         """
             Add a new user to the database.
         """
+        # Create a new User instance
         user = User(email=email, hashed_password=hashed_password)
+        # Add the User instance to the current SQLAlchemy session
         self._session.add(user)
+        # Commit the changes to the database to persist the new user
         self._session.commit()
+        # Return the User instance, now with an ID assigned by the db
         return user
