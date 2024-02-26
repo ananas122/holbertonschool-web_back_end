@@ -55,3 +55,21 @@ class DB:
         except NoResultFound as e:
             # e pr stock l instance de l except capturé ici
             raise NoResultFound(f"Invalid: {e}")
+
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update properties of an existing user."""
+        try:
+            # Find the user to update using the user_id
+            user = self.find_user_by(id=user_id)
+
+            # Update user's properties with the provided kwargs
+            for key, value in kwargs.items():
+                setattr(user, key, value)
+            # Commit the changes to the database
+            self._session.commit()
+            # Return None as specified in the function signature
+            return None
+        except NoResultFound:
+        # If no user is found with the specified user_id, raise a ValueError
+            raise ValueError("No such user.")
