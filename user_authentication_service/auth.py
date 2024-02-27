@@ -2,7 +2,6 @@
 """
 encrypting passwords
 """
-
 import bcrypt
 from db import DB
 from user import User, Base
@@ -49,23 +48,19 @@ class Auth:
             user = self._db.find_user_by(email=email)
             # Check if the provided psw matches the hashed psw in the db
             return bcrypt.checkpw(password.encode('utf-8'),
-                                    user.hashed_password)
+                                  user.hashed_password)
         except NoResultFound:
             # If no user is found with the provided email, return False
             return False
 
     def create_session(self, email: str) -> str:
-        """Create a session ID and update it in the database."""
+        """ Creates a session for the user """
         try:
-            # Retrieve the user by email
             user = self._db.find_user_by(email=email)
-            # Generate a new session ID
             session_id = _generate_uuid()
-            # Update the user's session ID in the database
             self._db.update_user(user.id, session_id=session_id)
             return session_id
         except NoResultFound:
-            # If no user is found with the provided email, return None
             return None
 
     def get_user_from_session_id(self, session_id: str) -> str:
