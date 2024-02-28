@@ -59,6 +59,7 @@ def logout() -> str:
     except Exception:
         abort(403)
 
+
 @ app.route('/profile', methods=['GET'])
 def profile() -> str:
     """ Get profile with session id
