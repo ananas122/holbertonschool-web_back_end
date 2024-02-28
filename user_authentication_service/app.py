@@ -78,7 +78,7 @@ def profile() -> str:
 
 
 @app.route('/reset_password', methods=['POST'])
-def reset_password() -> str:
+def get_reset_password_token() -> str:
     """ Get profile with session id"""
     try:
         email = request.form['email']
