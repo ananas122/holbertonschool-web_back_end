@@ -40,6 +40,7 @@ class Auth:
             hashed_password: str = _hash_password(password)
             # Add the new user to the database
             user = self._db.add_user(email, hashed_password)
+            return user    
 
     def valid_login(self, email: str, password: str) -> bool:
         """Validate credentials."""
@@ -54,7 +55,9 @@ class Auth:
             return False
 
     def create_session(self, email: str) -> str:
-        """Create a session ID and update it in the database."""
+        """
+        Create a session ID and update it in the database.
+        """
         try:
             # Retrieve the user by email
             user = self._db.find_user_by(email=email)
@@ -86,9 +89,8 @@ class Auth:
         """
         try:
             self._db.update_user(user_id, session_id=None)
-
             return None
-        except ValueError:
+        except Exception:
             return None
 
     def get_reset_password_token(self, email: str) -> str:
