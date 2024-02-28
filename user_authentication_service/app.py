@@ -1,51 +1,47 @@
 #!/usr/bin/env python3
-""" Flask module """
-from flask import Flask, jsonify, request, abort, redirect, make_response
-from sqlalchemy.orm.exc import NoResultFound
+"""Route module for the API
+"""
+
+from flask import Flask, abort, jsonify, request, redirect
 from auth import Auth
 
 app = Flask(__name__)
+
 AUTH = Auth()
 
 
-@app.route('/', methods=['GET'])
-def home():
-    """Return a welcome message"""
+@app.route('/')
+def welcome() -> str:
+    """Says weclome !"""
     return jsonify({"message": "Bienvenue"})
 
 
-@app.route("/users", methods=["POST"])
-def register_user():
-    # recup de email et psw depuis les donnees de formulare
-    email = request.form.get('email')
-    password = request.form.get('password')
+@app.route('/users', methods=["POST"], strict_slashes=False)
+def users() -> str:
+    """End-point to register a user"""
+    email = request.form.get("email")
+    password = request.form.get("password")
 
     try:
-        # Tentative d'ajout d'un nouvel user
-        user = AUTH.register_user(email, password)
-        # succes
-        return jsonify({"email": email, "message": "user created"})
+        AUTH.register_user(email, password)
     except ValueError:
-        # si mail deja enregistré
         return jsonify({"message": "email already registered"}), 400
+    return jsonify({"email": "{}".format(email), "message": "user created"})
 
 
-@app.route('/sessions', methods=['POST'])
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """ Sessions Login User """
-    try:
-        email = request.form['email']
-        pwd = request.form['password']
-    except KeyError:
-        abort(401)
+    """login function"""
+    email = request.form.get("email")
+    password = request.form.get("password")
 
-    if (AUTH.valid_login(email, pwd)):
+    if AUTH.valid_login(email, password):
         session_id = AUTH.create_session(email)
-        if session_id is not None:
-            response = jsonify({"email": email, "message": "logged in"})
-            response.set_cookie("session_id", session_id)
-            return response
-    abort(401)
+        res = jsonify({"email": "{}".format(email), "message": "logged in"})
+        res.set_cookie("session_id", session_id)
+        return res
+    else:
+        abort(401)
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
@@ -60,21 +56,14 @@ def logout() -> str:
         abort(403)
 
 
-@ app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile() -> str:
-    """ Get profile with session id
-    """
-    session_id = request.cookies.get('session_id', None)
-
-    if session_id is None:
-        abort(403)
-
+    """profile function to respond to the GET /profile route"""
+    session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
-
-    if user is None:
+    if not user:
         abort(403)
-
-    return jsonify({"email": user.email}), 200
+    return jsonify({"email": "{}".format(user.email)})
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
@@ -87,6 +76,7 @@ def get_reset_password_token() -> str:
                         "reset_token": "{}".format(reset_token)})
     except Exception:
         abort(403)
+
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
 def update_pasword() -> str:
