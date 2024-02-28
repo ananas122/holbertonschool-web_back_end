@@ -60,38 +60,26 @@ def logout() -> str:
         abort(403)
 
 
-@ app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile() -> str:
-    """ Get profile with session id
-    """
-    session_id = request.cookies.get('session_id', None)
-
-    if session_id is None:
-        abort(403)
-
+    """profile function to respond to the GET /profile route"""
+    session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
-
-    if user is None:
+    if not user:
         abort(403)
+    return jsonify({"email": "{}".format(user.email)})
 
-    return jsonify({"email": user.email}), 200
 
-
-@app.route('/reset_password', methods=['POST'])
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
 def get_reset_password_token() -> str:
-    """ Get profile with session id"""
+    """Function to respond to the POST /reset_password route"""
+    email = request.form.get("email")
     try:
-        email = request.form['email']
-    except KeyError:
+        reset_token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": "{}".format(email),
+                        "reset_token": "{}".format(reset_token)})
+    except Exception:
         abort(403)
-
-    token: str = ''
-    try:
-        token = AUTH.get_reset_password_token(email)
-    except ValueError:
-        abort(403)
-
-    return jsonify({"email": email, "reset_token": token}), 200
 
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
