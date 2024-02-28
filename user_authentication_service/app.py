@@ -48,23 +48,16 @@ def login() -> str:
     abort(401)
 
 
-@app.route('/sessions', methods=['DELETE'])
-def logout(self, session_id: str) -> Union[None, int]:
-    """Logout function to destroy session."""
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+def logout() -> str:
+    """logout function"""
+    session_id = request.cookies.get("session_id")
     try:
-        # Retrieve the user by session ID
-        user = self._db.find_user_by(session_id=session_id)
-        # If user exists, destroy the session
-        if user:
-            self._db.update_user(user.id, session_id=None)
-            # Return 200 OK status code indicating successful logout
-            return 200
-        else:
-            # If user does not exist, return 403 Forbidden status code
-            return 403
-    except NoResultFound:
-        # If no user is found with the provided session ID, return 403 Forbidden status code
-        return 403
+        user = AUTH.get_user_from_session_id(session_id)
+        AUTH.destroy_session(user.id)
+        return redirect("http://localhost:5000/", 302)
+    except Exception:
+        abort(403)
 
 @ app.route('/profile', methods=['GET'])
 def profile() -> str:
