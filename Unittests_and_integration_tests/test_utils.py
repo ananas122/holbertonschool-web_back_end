@@ -3,13 +3,9 @@
 """
 import unittest
 from functools import wraps
-from typing import (
-    Mapping,
-    Sequence,
-    Any,
-    Dict,
-    Callable,
-)
+from typing import Mapping, Sequence, Any, Dict, Callable
+from parameterized import parameterized
+from unittest.mock import patch
 import requests
 
 __all__ = [
@@ -22,24 +18,23 @@ __all__ = [
 
 
 class TestAccessNestedMap(unittest.TestCase):
-    def test_access_nested_map(self):
-        # Jeu de données pour tester un dictionnaire simple
-        nested_map1 = {"a": 1}
-        path1 = ("a",)
-        # Vérifie que la fonction renvoie la valeur attendue
-        self.assertEqual(access_nested_map(nested_map1, path1), 1)
 
-        # Jeu de données pour tester un dictionnaire avec un niveau de nesting
-        nested_map2 = {"a": {"b": 2}}
-        path2 = ("a",)
-        # Vérifie que la fonction renvoie le dictionnaire interne attendu
-        self.assertEqual(access_nested_map(nested_map2, path2), {"b": 2})
+    @parameterized.expand([
+        ({"a": 1}, ("a",), 1),
+        ({"a": {"b": 2}}, ("a",), {"b": 2}),
+        ({"a": {"b": 2}}, ("a", "b"), 2)
+    ])
+    def test_access_nested_map(self, nested_map, path, expected):
+        self.assertEqual(access_nested_map(nested_map, path), expected)
 
-        # Jeu de données pour tester un dictionnaire avec plusieurs niveaux de nesting
-        nested_map3 = {"a": {"b": 2}}
-        path3 = ("a", "b")
-        # Vérifie que la fonction renvoie la valeur attendue
-        self.assertEqual(access_nested_map(nested_map3, path3), 2)
+    @parameterized.expand([
+        ({}, ("a",), "a"),
+        ({"a": 1}, ("a", "b"), "b")
+    ])
+    def test_access_nested_map_exception(self, nested_map, path, expected_msg):
+        with self.assertRaises(KeyError) as context:
+            access_nested_map(nested_map, path)
+        self.assertEqual(str(context.exception), expected_msg)
 
 # Fonction pour accéder à une valeur dans un dictionnaire en suivant un chemin donné
 
