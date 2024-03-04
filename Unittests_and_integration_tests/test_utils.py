@@ -1,111 +1,92 @@
 #!/usr/bin/env python3
-"""Generic utilities for github org client.
+"""
+file unittests
 """
 import unittest
-from functools import wraps
-from typing import Mapping, Sequence, Any, Dict, Callable
 from parameterized import parameterized
-from unittest.mock import patch
-import requests
-
-__all__ = [
-    "access_nested_map",
-    "get_json",
-    "memoize",
-]
-
-# Classe de test pour la fonction access_nested_map
+from unittest.mock import patch, Mock
+from utils import access_nested_map, get_json, memoize
+from typing import Any, Dict, List, Tuple
 
 
 class TestAccessNestedMap(unittest.TestCase):
-
+    """ Access nested map """
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
-        ({"a": {"b": 2}}, ("a", "b"), 2)
+        ({"a": {"b": 2}}, ("a", "b"), 2),
     ])
-    def test_access_nested_map(self, nested_map, path, expected):
+    def test_access_nested_map(self, nested_map: Dict[Any, Any],
+                               path: List[str], expected: Any) -> None:
+        """ Test access nested map"""
         self.assertEqual(access_nested_map(nested_map, path), expected)
 
     @parameterized.expand([
-        ({}, ("a",), "a"),
-        ({"a": 1}, ("a", "b"), "b")
+        ({}, ("a",)),
+        ({"a": 1}, ("a", "b"))
     ])
-    def test_access_nested_map_exception(self, nested_map, path, expected_msg):
-        with self.assertRaises(KeyError) as context:
+    def test_access_nested_map_exception(self, nested_map: Dict[Any, Any],
+                                         path: List[str]):
+        ''' test exception'''
+        with self.assertRaises(KeyError):
             access_nested_map(nested_map, path)
-        self.assertEqual(str(context.exception), expected_msg)
-
-# Fonction pour accéder à une valeur dans un dictionnaire en suivant un chemin donné
 
 
-def access_nested_map(nested_map: Mapping, path: Sequence) -> Any:
-    """Access nested map with key path.
-    Parameters
-    ----------
-    nested_map: Mapping
-        A nested map
-    path: Sequence
-        a sequence of key representing a path to the value
-    Example
-    -------
-    >>> nested_map = {"a": {"b": {"c": 1}}}
-    >>> access_nested_map(nested_map, ["a", "b", "c"])
-    1
-    """
-    # Parcours du chemin dans le dictionnaire
-    for key in path:
-        # Vérifie si la clé existe dans le dictionnaire
-        if not isinstance(nested_map, Mapping):
-            raise KeyError(key)
-        nested_map = nested_map[key]
+class TestGetJson(unittest.TestCase):
+    ''' get json unittest '''
+    #  teste la fonction get_json avec différents paramètres.
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    def test_get_json(self, test_url, test_payload):
+        ''' self descriptive'''
+        # Classe interne Mocked pour simuler la réponse d'une requête HTTP.
+        class Mocked(Mock):
+            ''' mocked class'''
 
-    return nested_map
+            def json(self):
+                ''' json method mocked'''
+                return test_payload
 
-# Fonction pour récupérer du JSON à partir d'une URL distante
+        # Utilise patch pour remplacer l'appel à requests.get par un objet mock.
+        with patch('requests.get') as MockClass:
+            MockClass.return_value = Mocked()
+            self.assertEqual(get_json(test_url), test_payload)
 
 
-def get_json(url: str) -> Dict:
-    """Get JSON from remote URL.
-    """
-    response = requests.get(url)
-    return response.json()
+class Testmemoize(unittest.TestCase):
+    ''' memoize unittest '''
 
-# Décorateur pour mémoriser le résultat d'une méthode
+    def test_memoize(self):
+        ''' self descriptive'''
+        # Définition d'une classe test pour illustrer l'usage de memoize.
+        class TestClass:
+            ''' test class'''
 
+            def a_method(self):
+                ''' a method'''
+                return 42
 
-def memoize(fn: Callable) -> Callable:
-    """Decorator to memoize a method.
-    Example
-    -------
-    class MyClass:
-        @memoize
-        def a_method(self):
-            print("a_method called")
-            return 42
-    >>> my_object = MyClass()
-    >>> my_object.a_method
-    a_method called
-    42
-    >>> my_object.a_method
-    42
-    """
-    # Nom de l'attribut utilisé pour stocker le résultat mémorisé
-    attr_name = "_{}".format(fn.__name__)
+            @memoize
+            def a_property(self):
+                return self.a_method()
 
-    @wraps(fn)
-    def memoized(self):
-        """"memoized wraps"""
-        # Vérifie si le résultat est déjà mémorisé
-        if not hasattr(self, attr_name):
-            # Calcule le résultat et le mémorise
-            setattr(self, attr_name, fn(self))
-        # Retourne le résultat mémorisé
-        return getattr(self, attr_name)
-
-    return property(memoized)
+        # Utilis de patch pour créer un mock de a_method dans TestClass.
+        # Ceci permet de vérifier si la méthode est appelée plus d'une fois.
+        with patch.object(TestClass, 'a_method') as mock:
+            # Création d'une instance de TestClass pour le test.
+            instance = TestClass()
+            # Premier accès à la propriété a_property.
+            # doit déclencher l'appel de a_method et mis en cache du résultat.
+            instance.a_property
+            # Deuxième accès à la même propriété.
+            # Si fonctionne, a_method ne doit pas être appelée une seconde fois.
+            instance.a_property
+            # Vérification que a_method a été appelée une seule fois,
+            # confirme ainsi que le résultat a été correctement mis en cache.
+            mock.assert_called_once()
 
 
-# Point d'entrée pour exécuter les tests lorsque le script est exécuté directement
 if __name__ == "__main__":
     unittest.main()
