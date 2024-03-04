@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """ 
-module task 1
+module
 """
 
-from flask import Flask
-from flask_babel import Babel
+from flask import Flask, render_template
 
+# Création de l'application Flask
 app = Flask(__name__)
-babel = Babel(app)
 
 # Configuration des langues disponibles dans l'application
 app.config['LANGUAGES'] = {
@@ -15,12 +14,15 @@ app.config['LANGUAGES'] = {
     'fr': 'French'
 }
 
-
-@babel.localeselector
-def get_locale():
-    # Fonction de rappel pour déterminer la langue à utiliser
-    return 'fr'  
+# Configuration de la langue par défaut et du fuseau horaire
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
 
 
-if __name__ == "__main__":
+@app.route('/')
+def index():
+    return render_template('1-index.html')
+
+
+if __name__ == '__main__':
     app.run(debug=True)
