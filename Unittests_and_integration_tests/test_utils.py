@@ -45,7 +45,7 @@ class TestGetJson(unittest.TestCase):
 
 
 class TestMemoize(unittest.TestCase):
-    """memoize unit test"""
+    """memoize unit test """
 
     def test_memoize(self):
         """Test that when calling a_property twice, the correct result is
