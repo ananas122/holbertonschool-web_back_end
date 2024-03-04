@@ -1,28 +1,29 @@
 #!/usr/bin/env python3
-""" 
-module
-"""
-
+"""Module of routes for task 0x0A"""
+from datetime import datetime
 from flask import Flask, render_template
+from flask_babel import Babel
 
-# Création de l'application Flask
 app = Flask(__name__)
+babel = Babel(app)
 
-# Configuration des langues disponibles dans l'application
-app.config['LANGUAGES'] = {
-    'en': 'English',
-    'fr': 'French'
-}
 
-# Configuration de la langue par défaut et du fuseau horaire
-app.config['BABEL_DEFAULT_LOCALE'] = 'en'
-app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
+class Config(object):
+    """Config class to setup Babel for English and French"""
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
+
+
+app.config.from_object(Config)
 
 
 @app.route('/')
 def index():
+    """template 1"""
     return render_template('1-index.html')
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    host = "0.0.0.0"
+    port = "5000"
