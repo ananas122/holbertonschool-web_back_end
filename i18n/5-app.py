@@ -42,16 +42,21 @@ def index():
 
 
 def get_user() -> dict:
-    """
-    Récupérer l'utilisateur en fonction du paramètre login_as
-    """
+    """Retrieve user based on login_as parameter"""
+    # Get the value of the login_as prm from the request's query prm
     user_id = request.args.get('login_as')
     try:
+        # Try to convert the user_id to an integer
         user_id = int(user_id)
+        # Check if the user_id exists in the users dictionary
         if user_id in users:
+            # Return the user dictionary corresponding to the user_id
             return users[user_id]
+    # if there's an error during conversion or if user_id is not found in users
     except (ValueError, TypeError):
+        # If there's an error, do nothing and proceed to the next step
         pass
+    # If user_id is not found or there's an error
     return None
 
 
