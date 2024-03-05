@@ -30,6 +30,15 @@ class Config(object):
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
 
+app.config.from_object(Config)
+
+@app.route("/", methods=['GET'])
+def index():
+    """
+    Rendre le modèle avec les informations utilisateur appropriées
+    """
+    return render_template('5-index.html')
+
 def get_user() -> dict:
     """
     Récupérer l'utilisateur en fonction du paramètre login_as
@@ -64,14 +73,3 @@ def get_locale():
         return requested_locale
 
     return request.accept_languages.best_match(Config.LANGUAGES)
-
-
-app.config.from_object(Config)
-
-
-@app.route("/", methods=['GET'])
-def hello_world():
-    """
-    Rendre le modèle avec les informations utilisateur appropriées
-    """
-    return render_template('5-index.html')
