@@ -32,12 +32,14 @@ class Config(object):
 
 app.config.from_object(Config)
 
+
 @app.route("/", methods=['GET'])
 def index():
     """
     Rendre le modèle avec les informations utilisateur appropriées
     """
     return render_template('5-index.html')
+
 
 def get_user() -> dict:
     """
