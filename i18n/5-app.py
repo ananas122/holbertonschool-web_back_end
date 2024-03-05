@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """task 5"""
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, g
 from flask_babel import Babel, gettext
-
+from typing import Union
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -18,8 +18,8 @@ users = {
 class Config(object):
     """Config class to setup Babel for English and French"""
     LANGUAGES = ["en", "fr"]
-    Babel.default_locale = "en"
-    Babel.default_timezone = "UTC"
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
 app.config.from_object(Config)
@@ -33,10 +33,10 @@ def home():
 
 @babel.localeselector
 def get_locale():
-    """ Locale language"""
-    locale = request.args.get('locale', None)
-    if locale and locale in app.config['LANGUAGES']:
-        return locale
+    """ Locale language selector function """
+    user_locale = request.args.get('locale')
+    if user_locale in app.config['LANGUAGES']:
+        return user_locale
 
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
@@ -45,10 +45,10 @@ def get_user() -> Union[dict, None]:
     """ Returns user dict if ID can be found """
     if request.args.get('login_as'):
         user = int(request.args.get('login_as'))
-        if user in users:
-            return users.get(user)
+        return users.get(user)
     else:
         return None
+
 
 @app.before_request
 def before_request():
