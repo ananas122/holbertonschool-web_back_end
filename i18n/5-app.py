@@ -51,13 +51,12 @@ def get_locale():
 
 
 # Fonction pour récupérer l'utilisateur
-def get_user() -> Union[dict, None]:
-    """ Returns user dict if ID can be found """
-    if request.args.get('login_as'):
-        user = int(request.args.get('login_as'))
-        return users.get(user)
-    else:
-        return None
+def get_user() -> dict:
+    """get user"""
+    user_id = request.args.get('login_as')
+    if user_id and int(user_id) in users:
+        return users[int(user_id)]
+    return None
 
 
 # Fonction exécutée avant chaque requête
