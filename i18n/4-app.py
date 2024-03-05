@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """task 4"""
 from flask import Flask, render_template, request
-from flask_babel import Babel, gettext
-
+from flask_babel import Babel
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -20,13 +19,13 @@ app.config.from_object(Config)
 
 @app.route("/", methods=["GET"], strict_slashes=False)
 def index() -> str:
-    """Template for 4-index"""
+    """ Template for 4-index """
     return render_template('4-index.html')
 
 
 @babel.localeselector
 def get_locale():
-    """ Locale language"""
+    """ Locale language selector function """
     user_locale = request.args.get('locale')
     if user_locale in app.config['LANGUAGES']:
         return user_locale
