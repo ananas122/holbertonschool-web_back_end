@@ -26,7 +26,7 @@ app.config.from_object(Config)
 
 
 @app.route("/", methods=["GET"], strict_slashes=False)
-def home():
+def home() -> str:
     """Template for 5-index"""
     return render_template('5-index.html')
 
