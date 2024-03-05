@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Parametrize templates
+Paramétrer les modèles
 """
 import flask
 from flask import Flask, render_template, g, request
@@ -10,18 +10,20 @@ from flask_babel import Babel
 app = Flask(__name__)
 babel = Babel(app)
 
-
+# Utilisateurs fictifs
 users = {
-    USER_BALOU: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
-    USER_BEYONCE: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
-    USER_SPOCK: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
-    USER_TELETUBBY: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
+
+# Configuration de Babel
 
 
 class Config(object):
     """
-    a configuration variable
+    Configuration de l'application
     """
     LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_LOCALE = 'en'
@@ -30,7 +32,7 @@ class Config(object):
 
 def get_user() -> dict:
     """
-    Retrieve user based on login_as parameter
+    Récupérer l'utilisateur en fonction du paramètre login_as
     """
     user_id = request.args.get('login_as')
     try:
@@ -45,7 +47,7 @@ def get_user() -> dict:
 @app.before_request
 def before_request():
     """
-    Set the global user object if logged in
+    Définir l'utilisateur global s'il est connecté
     """
     user = get_user()
     if user:
@@ -55,7 +57,7 @@ def before_request():
 @babel.localeselector
 def get_locale():
     """
-    Determine the user's preferred locale
+    Déterminer la langue préférée de l'utilisateur
     """
     requested_locale = request.args.get('locale')
     if requested_locale in Config.LANGUAGES:
@@ -70,6 +72,6 @@ app.config.from_object(Config)
 @app.route("/", methods=['GET'])
 def hello_world():
     """
-    Render the template with the appropriate user information
+    Rendre le modèle avec les informations utilisateur appropriées
     """
     return render_template('5-index.html')
