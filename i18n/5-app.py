@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""task 4"""
+"""task 5"""
 from flask import Flask, render_template, request
 from flask_babel import Babel, gettext
 
@@ -27,8 +27,8 @@ app.config.from_object(Config)
 
 @app.route("/", methods=["GET"], strict_slashes=False)
 def home():
-    """Template for 4-index"""
-    return render_template('4-index.html')
+    """Template for 5-index"""
+    return render_template('5-index.html')
 
 
 @babel.localeselector
@@ -44,7 +44,6 @@ def get_locale():
 def get_user() -> Union[dict, None]:
     """ Returns user dict if ID can be found """
     if request.args.get('login_as'):
-        # have to type cast  the param to be able to search the user dict
         user = int(request.args.get('login_as'))
         if user in users:
             return users.get(user)

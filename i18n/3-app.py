@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """task 3"""
 from flask import Flask, render_template, request
-from flask_babel import Babel, gettext
+from flask_babel import Babel
 
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ app.config.from_object(Config)
 
 
 @app.route("/", methods=["GET"], strict_slashes=False)
-def home():
+def index() -> str:
     """Template for 3-index"""
     return render_template('3-index.html')
 
