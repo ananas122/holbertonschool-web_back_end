@@ -19,7 +19,7 @@ app.config.from_object(Config)
 
 
 @app.route('/')
-def index():
+def home():
     """Template for 2-index"""
     return render_template('2-index.html')
 
