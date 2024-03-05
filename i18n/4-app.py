@@ -19,7 +19,7 @@ app.config.from_object(Config)
 
 
 @app.route("/", methods=["GET"], strict_slashes=False)
-def home():
+def index() -> str:
     """Template for 4-index"""
     return render_template('4-index.html')
 
@@ -27,9 +27,9 @@ def home():
 @babel.localeselector
 def get_locale():
     """ Locale language"""
-    locale = request.args.get('locale', None)
-    if locale and locale in app.config['LANGUAGES']:
-        return locale
+    user_locale = request.args.get('locale')
+    if user_locale in app.config['LANGUAGES']:
+        return user_locale
 
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
