@@ -17,3 +17,30 @@ class Cache:
         self._redis.set(key, data)
         # Return the generated key
         return key
+
+    def get(self, key: str, fn: Optional[Callable] = None):
+        data = self._redis.get(key)
+        if data is not None:
+            return fn(data) if fn else data
+        else:
+            return None  # Return None if key doesn't exist
+
+    def get_str(self, key: str):
+        return self.get(key, fn=lambda d: d.decode("utf-8"))
+
+    def get_int(self, key: str):
+        return self.get(key, fn=int)
+
+
+# Test the Cache class
+cache = Cache()
+
+TEST_CASES = {
+    b"foo": None,
+    123: int,
+    "bar": lambda d: d.decode("utf-8")
+}
+
+for value, fn in TEST_CASES.items():
+    key = cache.store(value)
+    assert cache.get(key, fn=fn) == value
