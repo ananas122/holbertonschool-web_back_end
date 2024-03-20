@@ -19,11 +19,9 @@ class Cache:
         return key
 
     def get(self, key: str, fn: Optional[Callable] = None):
-        data = self._redis.get(key)
-        if data is not None:
-            return fn(data) if fn else data
-        else:
-            return None  # Return None if key doesn't exist
+        key = self._redis.get(key)
+        if fn:
+            return fn(key)
 
     def get_str(self, key: str):
         return self.get(key, fn=lambda d: d.decode("utf-8"))
