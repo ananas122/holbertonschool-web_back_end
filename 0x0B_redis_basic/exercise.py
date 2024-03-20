@@ -11,26 +11,25 @@ UnionOfTypes = Union[str, bytes, int, float]
 
 
 def count_calls(method: Callable) -> Callable:
-    """count number of calls
-        Callable: [method] """
+    """Décorateur pour compter le nombre d'appels à une méthode"""
     key = method.__qualname__
 
     @wraps(method)
     def wrapper(self, *args, **kwds):
-        """wrapper of decorator"""
+        """Fonction interne du décorateur"""
         self._redis.incr(key)
         return method(self, *args, **kwds)
     return wrapper
 
 
 def call_history(method: Callable) -> Callable:
-    """ number of history inputs"""
+    """Décorateur pour enregistrer l'historique des appels"""
     inputs = method.__qualname__ + ":inputs"
     outputs = method.__qualname__ + ":outputs"
 
     @wraps(method)
     def wrapper(self, *args, **kwds):
-        """wrapper of decorator"""
+        """Fonction interne du décorateur"""
         self._redis.rpush(inputs, str(args))
         returned_method = method(self, *args, **kwds)
         self._redis.rpush(outputs, str(returned_method))
@@ -39,7 +38,7 @@ def call_history(method: Callable) -> Callable:
 
 
 def replay(method: Callable):
-    """ replay to display hstory of calls"""
+    """Fonction pour rejouer et afficher l'historique des appels"""
     self_ = method.__self__
     stored_name = method.__qualname__
     stored_key = self_.get(stored_name)
@@ -48,7 +47,7 @@ def replay(method: Callable):
         inputs = self_._redis.lrange(stored_name + ":inputs", 0, -1)
         outputs = self_._redis.lrange(stored_name + ":outputs", 0, -1)
 
-        print(f"{stored_name} was called {times} times:")
+        print(f"{stored_name} a été appelée {times} fois:")
         zipvalues = zip(inputs, outputs)
         result_list = list(zipvalues)
         for k, v in result_list:
@@ -58,11 +57,11 @@ def replay(method: Callable):
 
 
 class Cache:
-    """ Cache redis class
+    """Classe de cache Redis
     """
 
     def __init__(self):
-        """ constructor for redis model
+        """Constructeur de la classe de modèle Redis
         """
         self._redis = redis.Redis()
         self._redis.flushdb()
@@ -70,7 +69,7 @@ class Cache:
     @call_history
     @count_calls
     def store(self, data: UnionOfTypes) -> str:
-        """store data into redis cache"""
+        """Stocker des données dans le cache Redis"""
         key = str(uuid4())
 
         self._redis.mset({key: data})
@@ -78,17 +77,25 @@ class Cache:
 
     def get(self, key: str, fn: Optional[Callable] = None)\
             -> UnionOfTypes:
-        """get key from redis"""
+        """Récupérer la clé depuis Redis"""
         if fn:
             return fn(self._redis.get(key))
         data = self._redis.get(key)
         return data
 
     def get_str(self, string: bytes) -> str:
-        """ get a string """
+        """Récupérer une chaîne de caractères"""
         return string.decode("utf-8")
 
-    def get_int(self, number: int) -> int:
-        """ get int value"""
-        result = 0 * 256 + int(number)
-        return result
+    def get_int(self, key: str) -> Optional[int]:
+        """Récupère data depuis Redis à l'aide d'une clé et les retourne en int"""
+        value = self._redis.get(key)
+        if value is not None:
+            try:
+                # Si la valeur est une chaîne d'octets, la convertit en UTF-8 et ensuite en entier
+                decoded_value = value.decode('utf-8')
+                return int(decoded_value)
+            except (UnicodeDecodeError, ValueError):
+                pass
+        return None
+
