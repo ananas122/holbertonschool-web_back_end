@@ -10,8 +10,8 @@ class Cache:
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
         # Generate random key
-        key = str(uuid.uuid4())  
+        key = str(uuid.uuid4())
         # Store data in Redis with random key
-        self._redis.set(key, data)  
+        self._redis.set(key, data)
         # Return the generated key
-        return key  
+        return key
