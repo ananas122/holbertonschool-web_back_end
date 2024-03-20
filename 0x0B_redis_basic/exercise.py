@@ -4,6 +4,7 @@ from typing import Union
 
 
 class Cache:
+    """Writing strings to Redis """
     def __init__(self):
         self._redis = redis.Redis()
         self._redis.flushdb()
