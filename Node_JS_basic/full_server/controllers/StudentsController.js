@@ -1,34 +1,44 @@
 import readDatabase from '../utils';
 
-export default class StudentsController {
-    static getAllStudents(request, response, DB) {
-        readDatabase(DB).then((result) => {
-            const students = [];
-            students.push('This is the list of our students');
-            Object.keys(result).sort().forEach((key) => {
-                students.push(`Number of students in ${key}: ${result[key].length}. List: ${result[key].join(', ')}`);
+class StudentsController {
+    static getAllStudents(request, response) {
+        readDatabase(process.argv[2] || './database.csv')
+            .then((studentsData) => {
+                const csList = studentsData.CS.join(', ');
+                const sweList = studentsData.SWE.join(', ');
+
+                const responseText = 'This is the list of our students\n'
+                    + `Number of students in CS: ${studentsData.CS.length}. List: ${csList}\n`
+                    + `Number of students in SWE: ${studentsData.SWE.length}. List: ${sweList}`;
+
+                response.status(200).send(responseText);
+            })
+            .catch((error) => {
+                console.error('Error processing students data:', error);
+                response.status(500).send('Cannot load the database');
             });
-            response.status(200);
-            response.send(students.join('\n'));
-        }).catch((error) => {
-            response.status(500);
-            response.send(error.message);
-        });
     }
 
-    static getAllStudentsByMajor(request, response, DB) {
+    static getAllStudentsByMajor(request, response) {
         const { major } = request.params;
+
         if (major !== 'CS' && major !== 'SWE') {
-            response.status(500);
-            response.send('Major parameter must be CS or SWE');
-        } else {
-            readDatabase(DB).then((result) => {
-                response.status(200);
-                response.send(`List: ${result[major].join(', ')}`);
-            }).catch((error) => {
-                response.status(500);
-                response.send(error.message);
-            });
+            response.status(500).send('Major parameter must be CS or SWE');
+            return;
         }
+
+        readDatabase(process.argv[2] || './database.csv')
+            .then((studentsData) => {
+                const majorStudents = studentsData[major] || [];
+                const responseText = `List: ${majorStudents.join(', ')}`;
+
+                response.status(200).send(responseText);
+            })
+            .catch((error) => {
+                console.error('Error processing students data:', error);
+                response.status(500).send('Cannot load the database');
+            });
     }
 }
+
+export default StudentsController;
