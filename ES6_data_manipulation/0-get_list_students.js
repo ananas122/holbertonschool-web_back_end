@@ -1,7 +1,3 @@
-/**
-* Returns a list of student objects.
-* @returns {Array} An array of student objects.
-*/
 export default function getListStudents () {
   const students = [
     { id: 1, firstName: 'Guillaume', location: 'San Francisco' },
