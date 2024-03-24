@@ -1,12 +1,9 @@
+// 0-calcul.js
 function calculateNumber(a, b) {
-    const aNum = Number(a);
-    const bNum = Number(b);
-    
-    if (Number.isNaN(aNum) || Number.isNaN(bNum))
-        throw TypeError('Parameters must be numbers');
-
-    return Math.round(aNum) + Math.round(bNum);
-};
-
+    if (typeof a !== 'number' || typeof b !== 'number' || isNaN(a) || isNaN(b)) {
+        throw new TypeError('Parameters must be numbers');
+    }
+    return Math.round(a) + Math.round(b);
+}
 
 module.exports = calculateNumber;
