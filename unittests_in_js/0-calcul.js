@@ -1,8 +1,7 @@
 function calculateNumber(a, b) {
-    if (typeof a !== 'number' || typeof b !== 'number' || isNaN(a) || isNaN(b)) {
-        throw new TypeError('Parameters must be numbers');
-    }
-    return Math.round(a) + Math.round(b);
+    const roundedA = Math.round(a);
+    const roundedB = Math.round(b);
+    return roundedA + roundedB;
 }
 
 module.exports = calculateNumber;
